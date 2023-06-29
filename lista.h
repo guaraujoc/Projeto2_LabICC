@@ -1,32 +1,32 @@
-<<<<<<< HEAD
 typedef struct {
+
     char nome[50];
-} Usuario;
+
+} usuario; // salva as informações do usuário
 
 typedef struct {
-    int id;
-    float valor;
-    float juros;
-    // Outros campos relevantes do financiamento
-} Financiamento;
+
+    int id;  // portador do financiamento
+    float valor;  // valor total
+    float juros;  // valor dos juros
+
+} financiamento; // salva as características do financiamento
 
 typedef struct {
-    int idFinanciamento;
-    float valorPrestacao;
-    float valorAmortizacao;
-    // Outros campos relevantes do pagamento
-} Pagamento;
 
-void identifica_usuario(Usuario* user);
-int verifica_debitos(Usuario* user);
-int cria_financiamento(Usuario* user, Financiamento* financiamento);
-void calcula_prestacao(Financiamento* financiamento);
-void realiza_pagamento(Pagamento* pagamento);
-void realiza_amortizacao(Financiamento* financiamento);
-void amortizacao_sac(Financiamento* financiamento);
-void amortizacao_saf(Financiamento* financiamento);
-void amortizacao_sam(Financiamento* financiamento);
-void recalcula_prestacao(Financiamento* financiamento);
-=======
+    int id_financiamento;   // localiza o financiamento
+    float valor_prestacao;  // valor de cada prestação
+    float valor_amortizacao;  // valor da amortização
 
->>>>>>> origin/main
+} pagamento; // recalcula as características do financiamento
+
+void identifica_usuario(usuario* user); // localiza usuário no arquivo
+int verifica_debitos(usuario* user);  // verifica se há financiamentos no seu nome
+int cria_financiamento(usuario* user, financiamento* financiamento); // cria um financiamento no seu nome
+void calcula_prestacao(financiamento* financiamento); // calcula o valor da prestação
+void realiza_pagamento(pagamento* pagamento);  // paga a prestação e recalcula o financiamento
+void realiza_amortizacao(financiamento* financiamento);  // amortiza a dívida
+void amortizacao_sac(financiamento* financiamento);  // fórmulas da amortização SAC
+void amortizacao_saf(financiamento* financiamento);  // fórmulas da amortização SAC
+void amortizacao_sam(financiamento* financiamento);  // fórmulas da amortização SAC
+
