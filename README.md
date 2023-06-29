@@ -1,6 +1,6 @@
 ﻿# Meu Financiamento
 
-## Descriçaõ
+## Descrição
 
     O programa "Meu Financiamento" tem como objetivo facilitar o acesso à informação das características do seu financiamento, mostrando os juros pagos, quantas prestações faltam e as suas novas características a cada amortização realizada. 
     O seu funcionamento foi divido em diferentes funções, as quais podem ser adaptadas para diferentes ambientes que necessitam de propriedades avulsas contidas nesse programa. Além disso, foi adaptado para a inclusão de métodos de amortização não convencional de maneira facilitada, permitindo o seu uso em diferentes localidades e sistemas.
