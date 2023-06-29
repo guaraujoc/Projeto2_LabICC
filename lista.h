@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 typedef struct {
     char nome[50];
 } Usuario;
@@ -26,3 +27,6 @@ void amortizacao_sac(Financiamento* financiamento);
 void amortizacao_saf(Financiamento* financiamento);
 void amortizacao_sam(Financiamento* financiamento);
 void recalcula_prestacao(Financiamento* financiamento);
+=======
+
+>>>>>>> origin/main
