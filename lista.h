@@ -1,24 +1,9 @@
 typedef struct {
-
-    char nome[50];
-
-} usuario; // salva as informações do usuário
-
-typedef struct {
-
-    int id;  // portador do financiamento
-    float valor;  // valor total
-    float juros;  // valor dos juros
-
-} financiamento; // salva as características do financiamento
-
-typedef struct {
-
-    int id_financiamento;   // localiza o financiamento
-    float valor_prestacao;  // valor de cada prestação
-    float valor_amortizacao;  // valor da amortização
-
-} pagamento; // recalcula as características do financiamento
+    char registro[50];
+    float valor;
+    float juros;
+    float periodo;
+} Prestacao;
 
 void identifica_usuario(usuario* user); // localiza usuário no arquivo
 int verifica_debitos(usuario* user);  // verifica se há financiamentos no seu nome
