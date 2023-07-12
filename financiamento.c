@@ -2,7 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define FECHAR 5
+#include <math.h>
+
 
 void cria_conta(const char* nome){
     FILE* arquivo = fopen(nome, "a"); // Cria arquivo com o nome do usuário
@@ -125,9 +126,72 @@ int cria_financiamento(usuario* user, financiamento* financiamento) { // cria um
 
 }
 void salva_informacoes();
-void calcula_prestacao(financiamento, tempo, amortizacao); // calcula o valor da prestação
+
+void calcula_prestacao_SAC(float montante, float taxa_juros, float periodo){
+
+    float amortizacao = montante/periodo;
+    float taxa_juros_dec = taxa_juros/100;
+    float juros;
+    float prestacao;
+    float saldo_devedor = montante;
+
+    for(int i = 0; i < periodo; i++){
+        juros = saldo_devedor * taxa_juros_dec;
+        prestacao = amortizacao + juros;
+        saldo_devedor -= amortizacao;
+
+        printf("%.2f\n", prestacao);
+
+    }
+}
+
+void calcula_prestacao_SAF(float montante, float juros, int periodo){
+
+    float taxa_juros_dec = juros/100;
+    float prestacao = montante * (taxa_juros_dec/ (1 - pow(1 + taxa_juros_dec, -periodo)));
+    float valor_inicial = montante;
+    float valor_total;
+
+    for(int i = 1; i <= periodo; i++) {
+        float juros = montante * taxa_juros_dec;
+        float amortizacao = prestacao - juros;
+        montante -= amortizacao;
+
+        valor_total = valor_total + prestacao;
+
+        printf("%.2f\n", prestacao);
+    }
+
+    float juros_totais = valor_total - valor_inicial;
+
+    printf("Você pagou %.2f reais de juros", juros_totais);
+
+}
+
+
+void calcula_prestacao_SAM(float montante, float taxa_juros, int periodo){
+
+    float amortizacao = montante/periodo;
+    float saldo_devedor = montante;
+    float taxa_juros_dec = taxa_juros/100; // Transforma a taxa percentual em decimal
+    float juros;
+    float prestacao;
+    float valor_total;
+
+    for(int i = 1; i <= periodo; i++) {
+        juros = saldo_devedor * taxa_juros_dec * (periodo - i + 1)/((periodo + 1) * 2);
+        prestacao = amortizacao + juros;
+        saldo_devedor -= amortizacao;
+
+        if(i == periodo){
+            saldo_devedor -= juros;
+        }
+
+        valor_total += prestacao;
+        printf("%.2f\n", prestacao);
+    }
+
+    float juros_totais = valor_total - montante;
+    printf("Juros pagos: %.2f\n", juros_totais);
+}
 void realiza_pagamento(pagamento* pagamento);  // paga a prestação e recalcula o financiamento
-void realiza_amortizacao(financiamento* financiamento);  // amortiza a dívida
-void amortizacao_sac(financiamento* financiamento);  // fórmulas da amortização SAC
-void amortizacao_saf(financiamento* financiamento);  // fórmulas da amortização SAC
-void amortizacao_sam(financiamento* financiamento);  // fórmulas da amortização SAC
