@@ -1,3 +1,4 @@
+
 #include "lista.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,36 +11,41 @@ void inicializacao(char nome[50]){
     int seleciona_financiamento;
     char registro[50];
 
+    // Apresenta o menu de seleção
     printf("O que você deseja fazer?\n\n1.Acessar financiamento. \n2.Criar um novo financiamento.\n3. Fechar o programa.\n\n");
-    scanf("%d", &selecao);
+    scanf("%d", &selecao); // Recebe a escolha
 
     if(selecao == 1) {
-        printf("Qual financiamento você quer acessar?\n\n");
+        printf("Qual financiamento você quer acessar?\n\n"); // Pergunta qual financiamento o usuário quer abrir
 
-        FILE* f = fopen(nome, "r");
+        FILE* f = fopen(nome, "r");  // Abre o arquivo
 
         char linha[PERIODO_MAXIMO];
 
         while (fgets(linha, sizeof(linha), f) != NULL) {
-            printf("%s", linha);
+            printf("%s", linha);  // Mostra os financiamentos registrados no nome do usuário
         }
 
-        scanf("%d", &seleciona_financiamento);
+        /*scanf("%d", &seleciona_financiamento); // Recebe o financiamento que o usuário quer acessar
 
         for (int i = 1; i <= seleciona_financiamento; i++) {
-            fgets(linha, PERIODO_MAXIMO, f);
+            printf("%s\n\n", fgets(linha, PERIODO_MAXIMO, f));
         }
+         */
 
         char nome_do_arquivo[100];
 
         scanf("%s", registro);
 
         strcpy(nome_do_arquivo, nome);
+        strcat(nome_do_arquivo, "_");
         strcat(nome_do_arquivo, registro);
 
         printf("%s", nome_do_arquivo);
 
         verifica_debitos(nome_do_arquivo);
+
+        fclose(f);
     }
 
     else if(selecao == 2){
@@ -48,11 +54,11 @@ void inicializacao(char nome[50]){
 
     }
 
-    else if(selecao == 3)
+    else if(selecao == 3) {
         return;
-
+    }
     else {
-        printf("Opção inválida, selecione uma opção válida.");
+        printf("Opção inválida, selecione uma opção válida.\n");
         inicializacao(nome);
     }
 }
@@ -66,6 +72,7 @@ void cria_financiamento(char nome[50]) { // Cria um novo financiamento
     scanf("%s", registro);
 
     strcpy(nome_do_arquivo, nome);
+    strcat(nome_do_arquivo, "_");
     strcat(nome_do_arquivo, registro);
 
     FILE* f = fopen(nome_do_arquivo, "a");  // Abre um arquivo com esse nome
@@ -162,10 +169,8 @@ void calcula_prestacao_SAF(char registro[50], float montante, float taxa_juros, 
         return;
     }
 
-    float amortizacao = montante / periodo;  // Calcula a amortização
     float taxa_juros_dec = taxa_juros / 100;  // Transforma a taxa de juros percentual em decimal
-    float prestacao = montante * (taxa_juros_dec/ (1 - pow(1 + taxa_juros_dec, -periodo))); // Aplica a fórmula do SAF
-    float saldo_devedor = montante;
+    float prestacao = montante * (taxa_juros_dec / (1 - pow(1 + taxa_juros_dec, -periodo))); // Aplica a fórmula do SAF
 
     for (int i = 0; i < periodo; i++) {  // Percorre as prestações com base no período
         float juros = montante * taxa_juros_dec;
@@ -178,6 +183,7 @@ void calcula_prestacao_SAF(char registro[50], float montante, float taxa_juros, 
     fclose(f);
 }
 
+
 void calcula_prestacao_SAM(char registro[50], float montante, float taxa_juros, float periodo) {
     FILE* f = fopen(registro, "a");
     if (f == NULL) {
@@ -187,24 +193,20 @@ void calcula_prestacao_SAM(char registro[50], float montante, float taxa_juros, 
 
     float amortizacao = montante / periodo;  // Calcula a amortização
     float taxa_juros_dec = taxa_juros / 100;  // Transforma a taxa de juros percentual em decimal
-    float juros;
-    float prestacao = montante * (taxa_juros_dec/ (1 - pow(1 + taxa_juros_dec, -periodo)));
+    float prestacao = montante * (taxa_juros_dec / (1 - pow(1 + taxa_juros_dec, -periodo)));
     float saldo_devedor = montante;
 
     for (int i = 0; i < periodo; i++) {  // Percorre as prestações com base no período
-        juros = saldo_devedor * taxa_juros_dec * (periodo - i + 1)/((periodo + 1) * 2);
+        float juros = saldo_devedor * taxa_juros_dec;
         prestacao = amortizacao + juros;
         saldo_devedor -= amortizacao;
-
-        if(i == periodo){
-            saldo_devedor -= juros;
-        }
 
         fprintf(f, "%.2f\n", prestacao);  // Insere as prestações no arquivo
     }
 
     fclose(f);
 }
+
 
 void verifica_debitos(char registro[50]) {
 
@@ -233,26 +235,64 @@ void verifica_debitos(char registro[50]) {
 
     fclose(f);
 
-    printf("Divida restante: %.2f\n", soma);
-    printf("Valor da próxima prestação: %.2f\n", proxima_prestacao);
+    if(soma <= 0) {
+        printf("Você quitou a sua dívida!\n");
+        remove(registro);
+    }
 
-    printf("O que voce deseja fazer?\n\n1. Pagar.\n2.Amortizar.\n3. Excluir registro.\nPara finalizar aperte qualquer tecla.\n");
+    printf("Divida restante: %.2f\n", soma);
+    printf("Valor da proxima prestacao: %.2f\n", proxima_prestacao);
+
+    printf("O que voce deseja fazer?\n\n1. Pagar.\n2.Abater dívida.\nPara finalizar aperte qualquer tecla.\n");
     scanf("%d", &selecao);
 
     if(selecao == 1)
         pagamento(registro);
 
-    if(selecao == 2){
-        printf("Voce tem certeza que quer excluir esse financiamento?\n\n1. Sim\n");
-        int confirmacao;
-        scanf("%d",&confirmacao);
-        if(confirmacao == 2) {
-            exclui_registro(registro);
-            printf("Financiamento excluido com sucesso!");
+    if(selecao == 2)
+        abate_divida(registro);
+
+
+}
+
+void abate_divida(char registro[50]) {
+    FILE* file = fopen(registro, "r"); // Abre o arquivo para leitura
+    FILE* fileTemp = fopen("temp.txt", "w"); // Criar um novo arquivo temporário
+
+    char linha[PERIODO_MAXIMO];
+    int contagem = 0;
+    int linha_count = 0;
+
+    // Contar o número total de linhas
+    while (fgets(linha, sizeof(linha), file) != NULL) {
+        linha_count++;
+    }
+
+    // Voltar ao início do arquivo
+    rewind(file);
+
+    // Copiar as linhas do arquivo original para o arquivo temporário, excluindo a última linha
+    while (fgets(linha, sizeof(linha), file) != NULL) {
+        contagem++;
+        if (contagem != linha_count) {
+            fputs(linha, fileTemp);
         }
     }
 
+    // Fechar os arquivos
+    fclose(file);
+    fclose(fileTemp);
+
+    // Substituir o arquivo original pelo arquivo temporário
+    remove(registro);
+    rename("temp.txt", registro);
+
+    printf("Antecipação realizada com sucesso!\n\n");
+
+    verifica_debitos(registro);
 }
+
+
 
 
 void pagamento(char registro[50]) {
@@ -278,39 +318,28 @@ void pagamento(char registro[50]) {
     remove(registro);
     rename("temp.txt", registro);
 
-    printf("Pagamento realizado com sucesso!");
+    printf("Pagamento realizado com sucesso!\n\n");
 
     verifica_debitos(registro);
 }
 
-void exclui_registro(char registro[50]) {
-    // Abrir o arquivo para leitura
-    FILE* file = fopen(registro, "r");
+float valor_linha(FILE* arquivo, int numeroLinha) {
+    char linha[100];
+    int contador = 0;
 
-    char nome[50];
-    printf("Digite o nome a ser procurado: "); // Recebe o nome no registro a ser excluído
-    fgets(nome, sizeof(nome), stdin);
-    nome[strcspn(nome, "\n")] = '\0'; // Remove o registro
-
-    FILE* fileTemp = fopen("temp.txt", "w"); // Criar um novo arquivo temporário
-
-    char line[PERIODO_MAXIMO];
-
-    while (fgets(line, sizeof(line), file) != NULL) { // Procur o nome no arquivo e exclui a linha correspondente
-        if (strstr(line, nome) == NULL) {
-            fputs(line, fileTemp);
+    while (fgets(linha, sizeof(linha), arquivo) != NULL) {
+        contador++;
+        if (contador == numeroLinha) {
+            return atof(linha);
         }
     }
 
-    // Fecha os arquivos
-    fclose(file);
-    fclose(fileTemp);
-
-    // Substitui o arquivo original pelo arquivo temporário
-    remove(registro);
-    rename("temp.txt", registro);
-    remove(nome);
+    return 0.0;
 }
+
+
+
+
 
 
 

@@ -1,3 +1,4 @@
+#include <stdio.h>
 #define PERIODO_MAXIMO 10000 // Define a quantidade máxima de prestações
 
 void inicializacao(char nome[50]);
@@ -7,6 +8,8 @@ void calcula_prestacao_SAF(char registro[50], float montante, float taxa_juros, 
 void calcula_prestacao_SAM(char registro[50], float montante, float taxa_juros, float periodo);
 void verifica_debitos(char registro[50]);
 void pagamento(char registro[50]);
-void exclui_registro(char registro[50]);
-//void nome_arquivo(char nome[50], char registro[50], char nome_do_arquivo[100]);
+void abate_divida(char registro[50]);
+void recalcula_financiamento(char registro[50], float montante, float taxa_juros, float periodo);
+//float calcularAbatimento(float parcelaAtual, float taxaJuros, int diasAntecipacao);
+float valor_linha(FILE* arquivo, int numeroLinha);
 
