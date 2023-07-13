@@ -9,7 +9,5 @@ void calcula_prestacao_SAM(char registro[50], float montante, float taxa_juros, 
 void verifica_debitos(char registro[50]);
 void pagamento(char registro[50]);
 void abate_divida(char registro[50]);
-void recalcula_financiamento(char registro[50], float montante, float taxa_juros, float periodo);
-//float calcularAbatimento(float parcelaAtual, float taxaJuros, int diasAntecipacao);
-float valor_linha(FILE* arquivo, int numeroLinha);
+void imprime_prestacoes(char registro[50]);
 
