@@ -3,25 +3,48 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <io.h>
-#define PERIODO_MAXIMO 10000 // Define a quantidade máxima de prestações
 
-void inicializacao(){
+void inicializacao(char nome[50]){
 
     int selecao;
+    int seleciona_financiamento;
     char registro[50];
+
     printf("O que você deseja fazer?\n\n1.Acessar financiamento. \n2.Criar um novo financiamento.\n3. Fechar o programa.\n\n");
     scanf("%d", &selecao);
 
     if(selecao == 1) {
-        printf("Qual o seu registro?");
+        printf("Qual financiamento você quer acessar?\n\n");
+
+        FILE* f = fopen(nome, "r");
+
+        char linha[PERIODO_MAXIMO];
+
+        while (fgets(linha, sizeof(linha), f) != NULL) {
+            printf("%s", linha);
+        }
+
+        scanf("%d", &seleciona_financiamento);
+
+        for (int i = 1; i <= seleciona_financiamento; i++) {
+            fgets(linha, PERIODO_MAXIMO, f);
+        }
+
+        char nome_do_arquivo[100];
+
         scanf("%s", registro);
-        verifica_debitos(registro);
+
+        strcpy(nome_do_arquivo, nome);
+        strcat(nome_do_arquivo, registro);
+
+        printf("%s", nome_do_arquivo);
+
+        verifica_debitos(nome_do_arquivo);
     }
 
     else if(selecao == 2){
 
-        cria_financiamento();
+        cria_financiamento(nome);
 
     }
 
@@ -30,17 +53,24 @@ void inicializacao(){
 
     else {
         printf("Opção inválida, selecione uma opção válida.");
-        inicializacao();
+        inicializacao(nome);
     }
 }
 
-void cria_financiamento() { // Cria um novo financiamento
+void cria_financiamento(char nome[50]) { // Cria um novo financiamento
 
     char registro[50];
-    printf("Qual nome voce gostaria de dar para o seu financiamento?");
+    char nome_do_arquivo[100];
+
+    printf("Qual nome voce gostaria de dar para o seu financiamento?\n");
     scanf("%s", registro);
-    FILE* f = fopen(registro, "a");  // Abre um arquivo com esse nome
-    FILE* f2 = fopen("dados", "a"); // Salva o nome dos financiamentos já existentes
+
+    strcpy(nome_do_arquivo, nome);
+    strcat(nome_do_arquivo, registro);
+
+    FILE* f = fopen(nome_do_arquivo, "a");  // Abre um arquivo com esse nome
+    FILE* f2 = fopen(nome, "a"); // Salva o nome dos financiamentos já existentes
+
 
     float montante;
     float taxa_juros;
@@ -68,7 +98,7 @@ void cria_financiamento() { // Cria um novo financiamento
     if (juros_selecao == 1)
         taxa_juros = taxa_juros / 12;
 
-    printf("Em quantas vezes você irá pagar?\n");
+    printf("Em quantas vezes voce ira pagar?\n");
     scanf("%f", &periodo); // Recebe o período para o pagamento
 
     fprintf(f2, "%s\n", registro);  // Imprime o registro no arquivo "dados.txt"
@@ -76,6 +106,7 @@ void cria_financiamento() { // Cria um novo financiamento
     fprintf(f, "%.0f\n", periodo);  // Imprime o periodo na primeira linha do arquivo com o nome do registro
 
     fclose(f); // Fecha o arquivo
+    fclose(f2);
 
     int selecao = 0;
 
@@ -88,13 +119,16 @@ void cria_financiamento() { // Cria um novo financiamento
     }
 
     if(selecao == 1)
-        calcula_prestacao_SAC(registro, montante, taxa_juros, periodo); // Realiza o cálculo das prestações SAC
+        calcula_prestacao_SAC(nome_do_arquivo, montante, taxa_juros, periodo); // Realiza o cálculo das prestações SAC
     if(selecao == 2)
-        calcula_prestacao_SAF(registro, montante, taxa_juros, periodo); // Realiza o cálculo das prestações SAF
+        calcula_prestacao_SAF(nome_do_arquivo, montante, taxa_juros, periodo); // Realiza o cálculo das prestações SAF
     if(selecao == 3)
-        calcula_prestacao_SAM(registro, montante, taxa_juros, periodo); // Realiza o cálculo das prestações SAM
+        calcula_prestacao_SAM(nome_do_arquivo, montante, taxa_juros, periodo); // Realiza o cálculo das prestações SAM
 
-    inicializacao();
+    printf("Financiamento criado com sucesso!\n\n");
+    verifica_debitos(nome_do_arquivo);
+
+    printf("\n\n");
 }
 
 void calcula_prestacao_SAC(char registro[50], float montante, float taxa_juros, float periodo) {
@@ -173,29 +207,50 @@ void calcula_prestacao_SAM(char registro[50], float montante, float taxa_juros, 
 }
 
 void verifica_debitos(char registro[50]) {
+
     FILE *f = fopen(registro, "r");
 
     char linha[PERIODO_MAXIMO];
     float soma = 0.0;
     float valor_inicial = 0.0;
     int linha_count = 0;
+    int selecao;
+    float proxima_prestacao;
 
     while (fgets(linha, PERIODO_MAXIMO, f) != NULL) {
         linha_count++;
         if (linha_count == 1) {
             valor_inicial = atof(linha);
+        }  else if (linha_count == 3) {
+            float prestacao = atof(linha);
+            proxima_prestacao = prestacao;
         } else if (linha_count > 2) {
             float prestacao = atof(linha);
             soma += prestacao;
         }
-    }
 
-    float juros_totais = soma - valor_inicial;
+    }
 
     fclose(f);
 
     printf("Divida restante: %.2f\n", soma);
-    printf("Juros totais: %.2f\n", juros_totais);
+    printf("Valor da próxima prestação: %.2f\n", proxima_prestacao);
+
+    printf("O que voce deseja fazer?\n\n1. Pagar.\n2.Amortizar.\n3. Excluir registro.\nPara finalizar aperte qualquer tecla.\n");
+    scanf("%d", &selecao);
+
+    if(selecao == 1)
+        pagamento(registro);
+
+    if(selecao == 2){
+        printf("Voce tem certeza que quer excluir esse financiamento?\n\n1. Sim\n");
+        int confirmacao;
+        scanf("%d",&confirmacao);
+        if(confirmacao == 2) {
+            exclui_registro(registro);
+            printf("Financiamento excluido com sucesso!");
+        }
+    }
 
 }
 
@@ -222,6 +277,10 @@ void pagamento(char registro[50]) {
     // Substituir o arquivo original pelo arquivo temporário
     remove(registro);
     rename("temp.txt", registro);
+
+    printf("Pagamento realizado com sucesso!");
+
+    verifica_debitos(registro);
 }
 
 void exclui_registro(char registro[50]) {
@@ -252,7 +311,6 @@ void exclui_registro(char registro[50]) {
     rename("temp.txt", registro);
     remove(nome);
 }
-
 
 
 
