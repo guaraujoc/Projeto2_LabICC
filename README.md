@@ -1,5 +1,8 @@
 ﻿# Meu Financiamento
 
+Aluno: Gustavo Carvalho Araújo / 13735630
+
+Aluno: João Pedro Gomes / 13839069
 
 ## Descrição
 
