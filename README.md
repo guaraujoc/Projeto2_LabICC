@@ -45,13 +45,9 @@ Para utilizar o programa, siga as seguintes etapas:
 
 6. Realize o pagamento de uma prestação, informando o valor pago.
 
-7. Realize a amortização do financiamento, informando o valor da amortização.
+7. Utilize os métodos de amortização (SAC, SAF ou SAM) de acordo com sua preferência.
 
-8. Utilize os métodos de amortização (SAC, SAF ou SAM) de acordo com sua preferência.
-
-9. Recalcule o valor das prestações sempre que necessário.
-
-10. Os dados do usuário, financiamentos, pagamentos e amortizações serão salvos em um arquivo.
+8. Os dados do usuário, financiamentos e prestações serão salvos em um arquivo.
 
 ## Requisitos de Compilação
 
