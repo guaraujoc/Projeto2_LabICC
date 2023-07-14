@@ -1,12 +1,18 @@
+/*
+ *
+Universidade de São Paulo
+Instituto de Ciências Matemáticas e de Computação
+SSC0601 – Laboratório de Introdução à Ciência de Computação I
+Aluno: Gustavo Carvalho Araújo / 13735630
+Aluno: João Pedro Gomes / 13839069
+
+ */
+
 #include "lista.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-
-#define SAC 1
-#define SAF 2
-#define SAM 3
 
 void inicializacao(char* nome){
 
