@@ -21,15 +21,13 @@ O programa oferece as seguintes funcionalidades:
 
 - Realização de pagamento de uma prestação: Permite ao usuário realizar o pagamento de uma prestação, registrando-o no sistema.
 
-- Realização de amortização: Permite ao usuário realizar a amortização do financiamento, registrando-a no sistema.
-
 - Amortização SAC: Implementa o método de amortização pela Tabela SAC.
 
 - Amortização SAF: Implementa o método de amortização pela Tabela SAF.
 
 - Amortização SAM: Implementa o método de amortização pela Tabela SAM.
 
-- Recálculo da prestação: Permite recalcular o valor das prestações após um pagamento ou amortização.
+- Abate de dívidas: Permite antecipar pagamentos e verificar a situação do financiamento.
 
 ## Utilização
 
@@ -47,13 +45,9 @@ Para utilizar o programa, siga as seguintes etapas:
 
 6. Realize o pagamento de uma prestação, informando o valor pago.
 
-7. Realize a amortização do financiamento, informando o valor da amortização.
+7. Utilize os métodos de amortização (SAC, SAF ou SAM) de acordo com sua preferência.
 
-8. Utilize os métodos de amortização (SAC, SAF ou SAM) de acordo com sua preferência.
-
-9. Recalcule o valor das prestações sempre que necessário.
-
-10. Os dados do usuário, financiamentos, pagamentos e amortizações serão salvos em um arquivo.
+8. Os dados do usuário, financiamentos e prestações serão salvos em um arquivo.
 
 ## Requisitos de Compilação
 
