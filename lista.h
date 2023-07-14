@@ -1,3 +1,13 @@
+/*
+
+Universidade de São Paulo
+Instituto de Ciências Matemáticas e de Computação
+SSC0601 – Laboratório de Introdução à Ciência de Computação I
+Aluno: Gustavo Carvalho Araújo / 13735630
+Aluno: João Pedro Gomes / 13839069
+
+ */
+
 #include <stdio.h>
 #define PERIODO_MAXIMO 10000 // Define a quantidade máxima de prestações
 

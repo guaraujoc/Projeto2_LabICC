@@ -1,5 +1,5 @@
 /*
- *
+
 Universidade de São Paulo
 Instituto de Ciências Matemáticas e de Computação
 SSC0601 – Laboratório de Introdução à Ciência de Computação I
