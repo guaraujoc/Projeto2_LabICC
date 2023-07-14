@@ -1,4 +1,3 @@
-
 #include "lista.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,7 +8,7 @@
 #define SAF 2
 #define SAM 3
 
-void inicializacao(char nome[50]){
+void inicializacao(char* nome){
 
     int selecao;
     int seleciona_financiamento;
@@ -68,7 +67,7 @@ void inicializacao(char nome[50]){
     }
 }
 
-void cria_financiamento(char nome[50]) { // Cria um novo financiamento
+void cria_financiamento(char* nome) { // Cria um novo financiamento
 
     char registro[50];
     char nome_do_arquivo[100];
@@ -151,7 +150,7 @@ void cria_financiamento(char nome[50]) { // Cria um novo financiamento
     printf("\n\n");
 }
 
-void recalcula_divida(char registro[50], float montante, float taxa_juros, float periodo, int selecao){
+void recalcula_divida(char* registro, float montante, float taxa_juros, float periodo, int selecao){
 
     FILE* f = fopen(registro, "a");  // Abre um arquivo com esse nome
 
@@ -178,7 +177,7 @@ void recalcula_divida(char registro[50], float montante, float taxa_juros, float
 }
 
 // Realiza o cálculo da prestação com base no Sistema de Amortização Comum
-void calcula_prestacao_SAC(char registro[50], float montante, float taxa_juros, float periodo) {
+void calcula_prestacao_SAC(char* registro, float montante, float taxa_juros, float periodo) {
     FILE* f = fopen(registro, "a"); // Abre o arquivo em modo anexo
 
     float amortizacao = montante / periodo;  // Calcula a amortização
@@ -217,7 +216,7 @@ void calcula_prestacao_SAF(char registro[50], float montante, float taxa_juros, 
 }
 
 
-void calcula_prestacao_SAM(char registro[50], float montante, float taxa_juros, float periodo) {
+void calcula_prestacao_SAM(char* registro, float montante, float taxa_juros, float periodo) {
     FILE* f = fopen(registro, "a"); // Abre o arquivo em modo anexo
 
     float amortizacao = montante / periodo;  // Calcula a amortização
@@ -237,7 +236,7 @@ void calcula_prestacao_SAM(char registro[50], float montante, float taxa_juros, 
 }
 
 // Função que avalia a situação do financiamento do usuário
-void verifica_debitos(char registro[50]) {
+void verifica_debitos(char* registro) {
 
     FILE *f = fopen(registro, "r"); // Abre o arquivo no modo leitura
 
@@ -295,7 +294,7 @@ void verifica_debitos(char registro[50]) {
 
 }
 
-void abate_divida(char registro[50]) { // realiza
+void abate_divida(char* registro) { // realiza
     FILE* f = fopen(registro, "r"); // Abre o arquivo para leitura
     FILE* f2 = fopen("temp.txt", "w"); // Criar um novo arquivo temporário
 
@@ -334,7 +333,7 @@ void abate_divida(char registro[50]) { // realiza
 
 
 
-void pagamento(char registro[50]) {
+void pagamento(char* registro) {
     FILE* f = fopen(registro, "r"); // Abre o arquivo para leitura
     FILE* f2 = fopen("temp.txt", "w"); // Criar um novo arquivo temporário
 
@@ -362,17 +361,18 @@ void pagamento(char registro[50]) {
     verifica_debitos(registro);
 }
 
-void imprime_prestacoes(char registro[50]) { // Imprime as prestaçoes para o usuario
+void imprime_prestacoes(char* registro) { // Imprime as prestaçoes para o usuario
 
     FILE *f = fopen(registro, "r"); // Abre o arquivo no modo leitura
 
-    printf("Suas prestações futuras são:");
+    printf("Suas prestações futuras são:\n");
 
     int i = 0;
     // Percorre o arquivo
     char linha[100];
     while (fgets(linha, sizeof(linha), f) != NULL) {
-        printf("%d) %s", i, linha);
+        if(i > 3)
+            printf("%d) %s", i - 3, linha);
         i++;
     }
 
